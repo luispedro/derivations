@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[]{amsmath}
+\usepackage{sagetex}
+
+\begin{document}
+\title{Integral of the product of two Gaussians}
+\author{Luis Pedro Coelho}
+\maketitle
+
+\begin{sageblock}
+x = var('x')
+mu1 = var('mu1')
+mu2 = var('mu2')
+s1 = var('s1', domain='positive')
+s2 = var('s2', domain='positive')
+assume(s1 > 0)
+assume(s2 > 0)
+
+def Z(s):
+    return sqrt(2*pi*s)
+
+def N(x, m, s):
+    return 1./Z(s) * exp(- (x-m)^2 /(2*s))
+\end{sageblock}
+
+\begin{sageblock}
+product = N(x, mu1, s1) * N(x,mu2,s2)
+\end{sageblock}
+
+We want to be able to compute:
+\begin{equation}
+\int_{-\infty}^{\infty} \sage{latex(product)} dx,
+\end{equation}
+or, in sage:
+\begin{sageblock}
+Nint = integral(product,x,-infinity,infinity)
+\end{sageblock}
+
+I assert that this is equal to:
+\begin{sageblock}
+s12 = s1*s2/(s1+s2)
+Ndirect = Z(s12)/(Z(s1)*Z(s2)) * exp(- (mu1-mu2)^2/2/(s1+s2))
+\end{sageblock}
+where
+\begin{align}
+\sigma^2_{12} &= \sage{latex(s12)}\\
+N &= \sage{latex(Ndirect)}
+\end{align}
+
+Let us check the ratio again
+\begin{sageblock}
+ratio = (Nint/Ndirect)
+ratio = ratio.simplify_full()
+\end{sageblock}
+The ratio is $\sage{latex(ratio)}$.
+
+We can also write the function above as
+\begin{sageblock}
+Ngaussian = Z(s12)*Z(s1+s2)/(Z(s1)*Z(s2)) *N(mu1,mu2,s1+s2)
+\end{sageblock}
+Which is the same thing:
+\begin{sageblock}
+ratio = (Nint/Ngaussian)
+ratio = ratio.simplify_full()
+\end{sageblock}
+The ratio is, again, $\sage{latex(ratio)}$.
+
+
+\end{document}
+
