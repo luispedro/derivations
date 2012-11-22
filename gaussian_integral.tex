@@ -56,15 +56,29 @@ The ratio is $\sage{latex(ratio)}$.
 
 We can also write the function above as
 \begin{sageblock}
-Ngaussian = Z(s12)*Z(s1+s2)/(Z(s1)*Z(s2)) *N(mu1,mu2,s1+s2)
+Ngaussian1 = Z(s12)*Z(s1+s2)/(Z(s1)*Z(s2)) *N(mu1,mu2,s1+s2)
 \end{sageblock}
-Which is the same thing:
+The products of all the $Z$s is going to simplify to 1:
 \begin{sageblock}
+Zs = Z(s12)*Z(s1+s2)/(Z(s1)*Z(s2))
+Zs = Zs.simplify_full()
+\end{sageblock}
+Results in $\sage{latex(Zs)}$.
+
+So, we get our final result:
+\begin{sageblock}
+Ngaussian = N(mu1,mu2,s1+s2)
 ratio = (Nint/Ngaussian)
 ratio = ratio.simplify_full()
 \end{sageblock}
 The ratio is, again, $\sage{latex(ratio)}$.
 
+Therefore:
+\begin{equation}
+\int N(x|\mu_1, \sigma_1^2) N(x|\mu_2, \sigma_2^2) dx =
+    N(\mu_1|\mu_2, \sigma_1^2 + \sigma_2^2) =
+    N(\mu_2|\mu_1, \sigma_1^2 + \sigma_2^2).
+\end{equation}
 
 \end{document}
 
