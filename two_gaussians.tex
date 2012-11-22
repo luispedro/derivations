@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage[]{amsmath}
+\usepackage{sagetex}
+
+\begin{document}
+\title{Product of two Gaussian probabilistic density functions}
+\author{Luis Pedro Coelho}
+\maketitle
+
+Let's start by defining a few variables:
+\begin{sageblock}
+x = var('x')
+mu1 = var('mu1')
+mu2 = var('mu2')
+\end{sageblock}
+$x$ will be our variable, $\mu_1$ and $\mu_2$ the means.
+
+\begin{sageblock}
+s1 = var('s1', domain='positive')
+s2 = var('s2', domain='positive')
+N1, N2 = var('N1 N2')
+\end{sageblock}
+We define $\sigma^2$ as positive.
+
+\begin{sageblock}
+def Z(s):
+    return sqrt(2*pi*s)
+def N(x, m, s):
+    return 1./Z(s) * exp(- (x-m)^2 /(2*s))
+
+N1 = N(x, mu1, s1)
+N2 = N(x, mu2, s2)
+\end{sageblock}
+
+\texttt{N1} is the first normal:
+\begin{equation}
+\sage{latex(N1)},
+\end{equation}
+which is not in canonical form because of sage simplification, but we can
+recognise the normal distribution.
+
+\begin{sageblock}
+product = N1 * N2
+\end{sageblock}
+
+
+The product as a Gaussian is readily obtained by algebraic manipulation:
+\begin{sageblock}
+m12 = (mu1*s2+mu2*s1)/(s1+s2)
+s12 = s1*s2/(s1+s2)
+newnormal = N(x,m12,s12)
+\end{sageblock}
+
+We have that
+\begin{align}
+\mu_{12} &= \sage{latex(m12)} \\
+\sigma_{12}^2 &= \sage{latex(s12)}
+\end{align}
+
+However, to obtain the full product, we need to add several normalization factors:
+\begin{sageblock}
+direct = 1./Z(s1)*1./Z(s2)*\
+        exp(- (mu1-mu2)^2/2/(s1+s2))*Z(s12)*newnormal
+\end{sageblock}
+Which is
+\begin{equation}
+\sage{latex(direct)}.
+\end{equation}
+
+Let's finally check that this is correct, by checking the value of the ratio:
+\begin{sageblock}
+final = (product/direct).full_simplify()
+\end{sageblock}
+
+And the output is $\sage{final}$!
+
+\end{document}
+
