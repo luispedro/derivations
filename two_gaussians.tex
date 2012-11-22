@@ -23,10 +23,8 @@ N1, N2 = var('N1 N2')
 We define $\sigma^2$ as positive.
 
 \begin{sageblock}
-def Z(s):
-    return sqrt(2*pi*s)
-def N(x, m, s):
-    return 1./Z(s) * exp(- (x-m)^2 /(2*s))
+Z(s) = sqrt(2*pi*s)
+N(x,m,s) = 1./Z(s) * exp(- (x-m)^2 /(2*s))
 
 N1 = N(x, mu1, s1)
 N2 = N(x, mu2, s2)
