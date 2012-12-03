@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[]{amsmath}
+\let\product\Pi
+\parindent=0pt\relax
+
+\begin{document}
+\title{Bayesian odds ratio of two multinomials}
+\author{Luis Pedro Coelho}
+\maketitle
+
+\emph{The equations in this derivation have not been checked by automatic
+software. Unfortunately, I cannot think of a way of checking them easily as I
+have not found a piece of software which understood Dirichlet integrals in $k$
+dimensions.}
+
+\bigbreak
+
+We are given two datasets $\mathcal{D}_1$ and~$\mathcal{D}_2$, which are
+completely summarised as the output of a multinomial of size~$k$. The question
+is: \emph{were these two datasets produced by a single multinomial or two
+different multinomial?} We will call the single multinomial
+hypothesis~$\mathcal{H}_1$ and the two multinomial hypothesis~$\mathcal{H}_2$.
+
+If we call $\mathcal{D}$ the complete data, we are enquiring after:
+\begin{equation}
+\frac{P(\mathcal{H}_1|\mathcal{D})}{P(\mathcal{H}_2|\mathcal{D})}.
+\label{eq:odds}
+\end{equation}
+If we assume a prior with the same value for both hypothesis, this is equivalent to
+\begin{equation}
+\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)}.
+\label{eq:odds-reversed}
+\end{equation}
+We will also assume that the two datasets are independent in the case of a single multinomial, i.e.,
+\begin{equation}
+\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} = 
+\frac{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_1)}{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_2)} =
+\frac{P(\mathcal{D}_1|\mathcal{H}_1)P(\mathcal{D}_2|\mathcal{H}_2)}{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_2)}.
+\label{eq:p1p2-overp12}
+\end{equation}
+
+To move forward, we need to consider what form $P(\mathcal{D}_1|\mathcal{H}_1)$ takes:
+\begin{align}
+P(\vec{c}|\alpha,M)
+    &= \int P(\vec{c}|\vec{\theta}|M)P(\vec{\theta}|M) d\theta \\
+    &= \frac{1}{D(\vec{\alpha})}{\int (\product_i \theta_i^{c_i})(\product_i \theta_i^{\alpha_i-1}) d\theta} \\
+    &= \frac{1}{D(\vec{\alpha})}{\int \product_i \theta_i^{c_i + \alpha_i - 1} d\theta} \\
+    &= \frac{D(\vec{c} + \vec{\alpha})}{D(\vec{\alpha})},
+\end{align}
+where $D$ is the Dirichlet normalizing constant:
+\begin{equation}
+D(\vec{\alpha}) = \frac{\product_i \Gamma(\alpha_i)}{\Gamma(\sum_i \alpha_i)},
+\end{equation}
+which is also sometimes called the multinomial Beta (but too many functions are
+already called Beta).
+
+Back to~(\ref{eq:p1p2-overp12}). For convenience, I will call the vector of
+counts from $\mathcal{D}_1$ $\vec{x}$ and that from $\mathcal{D}_2 \vec{y}$.
+(\ref{eq:p1p2-overp12}) expands to
+\begin{equation}
+\frac{D(\vec{x}+\alpha)}{D(\vec{\alpha})}
+\frac{D(\vec{y}+\alpha)}{D(\vec{\alpha})}
+\frac{D(\vec{\alpha})}{D(\vec{x}+\vec{y}+\alpha)} = \frac{D(\vec{x}+\vec{\alpha})D(\vec{y}+\vec\alpha)D(\vec\alpha)}{D(\vec{x}+\vec{y}+\vec\alpha)}.
+\end{equation}
+
+With another another assumption, namely that $\alpha_i = 0$ (and $D(\vec\alpha)
+= 1$, which implies an improper prior), we can get a nicer expression:
+\begin{equation}
+\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} = \frac{D(\vec{x})D(\vec{y})}{D(\vec{x}+\vec{y})}.
+\end{equation}
+
+\end{document}
+
