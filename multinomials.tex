@@ -33,13 +33,16 @@ If we assume a prior with the same value for both hypothesis, this is equivalent
 \end{equation}
 We will also assume that the two datasets are independent in the case of a single multinomial, i.e.,
 \begin{equation}
-\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} = 
+\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} =
 \frac{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_1)}{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_2)} =
-\frac{P(\mathcal{D}_1|\mathcal{H}_1)P(\mathcal{D}_2|\mathcal{H}_2)}{P(\mathcal{D}_1,\mathcal{D}_2|\mathcal{H}_2)}.
+\frac{P(\mathcal{D}_1|M)P(\mathcal{D}_2|M)}{P(\mathcal{D}_1,\mathcal{D}_2|M)},
 \label{eq:p1p2-overp12}
 \end{equation}
-
-To move forward, we need to consider what form $P(\mathcal{D}_1|\mathcal{H}_1)$ takes:
+where $M$ is the multinomial model. We now consider what form
+$P(\mathcal{D}_i|M)$ takes. The data is simply a vector of counts, which we
+will call~$\vec x$. We need to integrate over all possible multinomials, which
+are in turn defined by a vector~$\vec\theta$ in the simplex defined by $\sum_i
+\theta_i = 1$. We use a Dirichlet prior, which needs a new parameter~$\vec\alpha$.
 \begin{align}
 P(\vec{c}|\alpha,M)
     &= \int P(\vec{c}|\vec{\theta}|M)P(\vec{\theta}|M) d\theta \\
@@ -55,19 +58,31 @@ which is also sometimes called the multinomial Beta (but too many functions are
 already called Beta).
 
 Back to~(\ref{eq:p1p2-overp12}). For convenience, I will call the vector of
-counts from $\mathcal{D}_1$ $\vec{x}$ and that from $\mathcal{D}_2 \vec{y}$.
+counts from $\mathcal{D}_1$, $\vec{x}$ and that from $\mathcal{D}_2$, $\vec{y}$.
 (\ref{eq:p1p2-overp12}) expands to
 \begin{equation}
-\frac{D(\vec{x}+\alpha)}{D(\vec{\alpha})}
-\frac{D(\vec{y}+\alpha)}{D(\vec{\alpha})}
-\frac{D(\vec{\alpha})}{D(\vec{x}+\vec{y}+\alpha)} = \frac{D(\vec{x}+\vec{\alpha})D(\vec{y}+\vec\alpha)D(\vec\alpha)}{D(\vec{x}+\vec{y}+\vec\alpha)}.
+\frac{D(\vec{x}+\alpha)}{D(\vec{\alpha})}\cdot
+    \frac{D(\vec{y}+\alpha)}{D(\vec{\alpha})}\cdot
+    \frac{D(\vec{\alpha})}{D(\vec{x}+\vec{y}+\alpha)} =
+\frac{D(\vec{x}+\vec{\alpha})D(\vec{y}+\vec\alpha)}{D(\vec{x}+\vec{y}+\vec\alpha) D(\vec\alpha)}.
 \end{equation}
 
 With another another assumption, namely that $\alpha_i = 0$ (and $D(\vec\alpha)
 = 1$, which implies an improper prior), we can get a nicer expression:
 \begin{equation}
 \frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} = \frac{D(\vec{x})D(\vec{y})}{D(\vec{x}+\vec{y})}.
+\label{eq:final-frac-a0}
 \end{equation}
 
+If we further define the Beta function $B$ as:
+\begin{equation}
+B(x,y) = \frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)},
+\end{equation}
+then (\ref{eq:final-frac-a0}) become:
+\begin{equation}
+\frac{P(\mathcal{D}|\mathcal{H}_1)}{P(\mathcal{D}|\mathcal{H}_2)} =
+        \frac{D(\vec{x})D(\vec{y})}{D(\vec{x}+\vec{y})} =
+        \product_i B(x_i, y_i).
+\end{equation}
 \end{document}
 
