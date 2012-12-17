@@ -45,7 +45,7 @@ are in turn defined by a vector~$\vec\theta$ in the simplex defined by $\sum_i
 \theta_i = 1$. We use a Dirichlet prior, which needs a new parameter~$\vec\alpha$.
 \begin{align}
 P(\vec{c}|\alpha,M)
-    &= \int P(\vec{c}|\vec{\theta}|M)P(\vec{\theta}|M) d\theta \\
+    &= \int P\left(\vec{c} \mid \vec{\theta},M\right)P(\vec{\theta}|M) d\theta \\
     &= \frac{1}{D(\vec{\alpha})}{\int (\product_i \theta_i^{c_i})(\product_i \theta_i^{\alpha_i-1}) d\theta} \\
     &= \frac{1}{D(\vec{\alpha})}{\int \product_i \theta_i^{c_i + \alpha_i - 1} d\theta} \\
     &= \frac{D(\vec{c} + \vec{\alpha})}{D(\vec{\alpha})},
